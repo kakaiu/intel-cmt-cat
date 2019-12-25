@@ -35,8 +35,8 @@
  * @brief Platform QoS utility - main module
  */
 
-//#ifndef __MAIN_H__
-//#define __MAIN_H__
+#ifndef __PQOS_MAIN_H__
+#define __PQOS_MAIN_H__
 
 #ifdef DEBUG
 #include <assert.h>
@@ -147,4 +147,4 @@ void selfn_strdup(char **sel, const char *arg);
 
 int pqos_main(int argc, char **argv);
 
-//#endif /* __MAIN_H__ */
+#endif /* __PQOS_MAIN_H__ */
