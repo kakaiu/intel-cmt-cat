@@ -52,7 +52,7 @@
 #include "pqos.h"
 
 #include "common.h"
-#include "main.h"
+#include "pqos-main.h"
 #include "monitor.h"
 
 #define PQOS_MAX_PID_MON_GROUPS         256

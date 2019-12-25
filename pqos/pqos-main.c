@@ -47,7 +47,7 @@
 
 #include "pqos.h"
 
-#include "main.h"
+#include "pqos-main.h"
 #include "profiles.h"
 #include "monitor.h"
 #include "alloc.h"

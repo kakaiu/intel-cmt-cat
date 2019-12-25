@@ -43,7 +43,7 @@
 
 #include "pqos.h"
 
-#include "main.h"
+#include "pqos-main.h"
 #include "alloc.h"
 
 /**
