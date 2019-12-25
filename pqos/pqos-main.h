@@ -37,7 +37,7 @@
 
 #ifndef __PQOS_MAIN_H__
 #define __PQOS_MAIN_H__
-#include <cstdint>
+
 #ifdef DEBUG
 #include <assert.h>
 #endif
@@ -97,7 +97,7 @@ extern enum pqos_interface sel_interface;
  *
  * @return Numeric value of the string representing the number
  */
-uint64_t
+unsigned long long
 strtouint64(const char *s);
 
 /**
@@ -120,7 +120,7 @@ strtouint64(const char *s);
  * @return Number of elements placed into \a tab
  */
 unsigned
-strlisttotab(char *s, uint64_t *tab, const unsigned max);
+strlisttotab(char *s, unsigned long long *tab, const unsigned max);
 
 /**
  * @brief Common function to handle string parsing errors
