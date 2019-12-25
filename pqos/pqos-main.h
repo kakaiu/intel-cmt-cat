@@ -37,7 +37,7 @@
 
 #ifndef __PQOS_MAIN_H__
 #define __PQOS_MAIN_H__
-
+#include <cstdint>
 #ifdef DEBUG
 #include <assert.h>
 #endif
