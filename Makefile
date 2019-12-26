@@ -50,7 +50,6 @@ endif
 .PHONY: all clean TAGS install uninstall style cppcheck
 
 all:
-	gcc main.c -o main
 	$(MAKE) -C lib
 	$(MAKE) -C pqos
 	$(MAKE) -C rdtset
