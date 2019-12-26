@@ -141,7 +141,7 @@ style:
 	$(CHECKPATCH) --no-tree --no-signoff --emacs \
 	--ignore CODE_INDENT,INITIALISED_STATIC,LEADING_SPACE,SPLIT_STRING,UNSPECIFIED_INT,ARRAY_SIZE,\
 	SPDX_LICENSE_TAG,CONST_STRUCT \
-	 -f main.c -f pqos-main.h -f monitor.c -f monitor.h -f alloc.c -f alloc.h -f profiles.c -f profiles.h \
+	 -f pqos-main.c -f pqos-main.h -f monitor.c -f monitor.h -f alloc.c -f alloc.h -f profiles.c -f profiles.h \
 	 -f cap.h -f cap.c -f common.h -f common.c
 
 CPPCHECK?=cppcheck
@@ -149,7 +149,7 @@ CPPCHECK?=cppcheck
 cppcheck:
 	$(CPPCHECK) --enable=warning,portability,performance,unusedFunction,missingInclude \
 	--std=c99 -I$(LIBDIR) --template=gcc \
-	main.c pqos-main.h alloc.c alloc.h monitor.c monitor.h profiles.c profiles.h \
+	pqos-main.c pqos-main.h alloc.c alloc.h monitor.c monitor.h profiles.c profiles.h \
 	cap.h cap.c common.h common.c
 
 # if target not clean then make dependencies
