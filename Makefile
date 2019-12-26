@@ -57,6 +57,7 @@ all:
 	$(MAKE) -C examples/c/CAT_MBA
 	$(MAKE) -C examples/c/CMT_MBM
 	$(MAKE) -C examples/c/PSEUDO_LOCK
+	gcc -o main.c main.o
 
 clean:
 	$(MAKE) -C lib clean
