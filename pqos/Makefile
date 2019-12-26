@@ -80,7 +80,7 @@ CFLAGS += -DPQOS_RMID_CUSTOM
 endif
 
 # Build targets and dependencies
-#APP = pqos
+APP = pqos
 MAN = pqos.8
 
 # XXX: modify as desired
