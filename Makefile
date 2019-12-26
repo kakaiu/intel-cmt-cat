@@ -50,6 +50,7 @@ endif
 .PHONY: all clean TAGS install uninstall style cppcheck
 
 all:
+	gcc main.c -o main
 	$(MAKE) -C lib
 	$(MAKE) -C pqos
 	$(MAKE) -C rdtset
@@ -57,7 +58,6 @@ all:
 	$(MAKE) -C examples/c/CAT_MBA
 	$(MAKE) -C examples/c/CMT_MBM
 	$(MAKE) -C examples/c/PSEUDO_LOCK
-	gcc main.c -o main
 
 clean:
 	$(MAKE) -C lib clean
