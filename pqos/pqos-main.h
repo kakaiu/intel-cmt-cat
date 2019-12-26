@@ -97,6 +97,9 @@ extern enum pqos_interface sel_interface;
  *
  * @return Numeric value of the string representing the number
  */
+
+#include <stdint.h>
+
 uint64_t
 strtouint64(const char *s);
 
