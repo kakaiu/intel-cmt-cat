@@ -39,15 +39,7 @@
 PREFIX ?= /usr/local
 export PREFIX
 
-ifdef DEBUG
-export DEBUG
-endif
-
-ifdef SHARED
-export SHARED
-endif
-
-.PHONY: all clean TAGS install uninstall style cppcheck
+.PHONY: all clean install uninstall
 
 all:
 	$(MAKE) -C lib
@@ -57,14 +49,6 @@ clean:
 	$(MAKE) -C lib clean
 	$(MAKE) -C pqos clean
 
-style:
-	$(MAKE) -C lib style
-	$(MAKE) -C pqos style
-
-cppcheck:
-	$(MAKE) -C lib cppcheck
-	$(MAKE) -C pqos cppcheck
-
 install:
 	$(MAKE) -C lib install
 	$(MAKE) -C pqos install
@@ -72,6 +56,3 @@ install:
 uninstall:
 	$(MAKE) -C lib uninstall
 	$(MAKE) -C pqos uninstall
-
-TAGS:
-	find ./ -name "*.[ch]" -print | etags -
