@@ -97,7 +97,7 @@ extern enum pqos_interface sel_interface;
  *
  * @return Numeric value of the string representing the number
  */
-unsigned long long
+uint64_t
 strtouint64(const char *s);
 
 /**
@@ -120,7 +120,7 @@ strtouint64(const char *s);
  * @return Number of elements placed into \a tab
  */
 unsigned
-strlisttotab(char *s, unsigned long long *tab, const unsigned max);
+strlisttotab(char *s, uint64_t *tab, const unsigned max);
 
 /**
  * @brief Common function to handle string parsing errors
