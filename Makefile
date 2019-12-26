@@ -44,7 +44,7 @@ export PREFIX
 all:
 	$(MAKE) -C lib
 	$(MAKE) -C pqos
-	$(MAKE) -C main
+	$(MAKE) -C *
 
 clean:
 	$(MAKE) -C lib clean
