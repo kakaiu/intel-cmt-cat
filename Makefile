@@ -38,12 +38,13 @@
 # XXX: modify as desired
 PREFIX ?= /usr/local
 export PREFIX
+VPATH = pqos
 
-.PHONY: all clean install uninstall
+.PHONY: all clean install uninstall T2 T3 T1
 
 all: T2 T3 T1
 T1:
-	gcc main.c -o main -l/pqos
+	gcc main.c -o main pqos-main.o
 T2: 
 	$(MAKE) -C lib
 T3:
