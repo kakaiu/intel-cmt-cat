@@ -43,7 +43,7 @@ export PREFIX
 
 all: T2 T3 T1
 T1:
-	gcc main.c pqos -o main
+	gcc main.c pqos/pqos-main.c pqos/pqos-main.h -o main
 T2: 
 	$(MAKE) -C lib
 T3:
