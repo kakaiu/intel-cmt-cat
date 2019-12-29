@@ -35,7 +35,7 @@
 #
 ###############################################################################
 
-LIBDIR ?= ../../../lib
+LIBDIR ?= ../../lib
 CFLAGS =-I$(LIBDIR) -pthread \
 	-W -Wall -Wextra -Wstrict-prototypes -Wmissing-prototypes \
 	-Wmissing-declarations -Wold-style-definition -Wpointer-arith \
