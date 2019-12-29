@@ -42,9 +42,9 @@ export PREFIX
 .PHONY: all clean install uninstall
 
 all:
+	$(MAKE) -C -MM main.c
 	$(MAKE) -C lib
 	$(MAKE) -C pqos
-	gcc pqos main.c -o main
 
 clean:
 	$(MAKE) -C lib clean
