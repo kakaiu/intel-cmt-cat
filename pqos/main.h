@@ -35,8 +35,8 @@
  * @brief Platform QoS utility - main module
  */
 
-#ifndef __PQOS_MAIN_H__
-#define __PQOS_MAIN_H__
+#ifndef __MAIN_H__
+#define __MAIN_H__
 
 #ifdef DEBUG
 #include <assert.h>
@@ -97,9 +97,6 @@ extern enum pqos_interface sel_interface;
  *
  * @return Numeric value of the string representing the number
  */
-
-#include <stdint.h>
-
 uint64_t
 strtouint64(const char *s);
 
@@ -148,6 +145,4 @@ void selfn_strdup(char **sel, const char *arg);
 }
 #endif
 
-int pqos_main(int argc, char **argv);
-
-#endif /* __PQOS_MAIN_H__ */
+#endif /* __MAIN_H__ */

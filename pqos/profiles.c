@@ -39,7 +39,7 @@
 
 #include "profiles.h"
 #include "pqos.h"
-#include "pqos-main.h"
+#include "main.h"
 #include "alloc.h"
 
 #define PROFILES_MIN_COS 4

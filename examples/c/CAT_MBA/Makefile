@@ -1,10 +1,10 @@
 ###############################################################################
-# Makefile script for PQoS sample application
+# Makefile script for CAT PQoS sample applications
 #
 # @par
 # BSD LICENSE
 #
-# Copyright(c) 2014-2019 Intel Corporation. All rights reserved.
+# Copyright(c) 2018-2019 Intel Corporation. All rights reserved.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -35,21 +35,19 @@
 #
 ###############################################################################
 
-LIBDIR ?= ../lib
-LDFLAGS = -L$(LIBDIR) -pie -z noexecstack -z relro -z now
-LDLIBS = -lpqos -lpthread
-CFLAGS = -I$(LIBDIR) \
+LIBDIR ?= ../../../lib
+CFLAGS =-I$(LIBDIR) \
 	-W -Wall -Wextra -Wstrict-prototypes -Wmissing-prototypes \
 	-Wmissing-declarations -Wold-style-definition -Wpointer-arith \
-	-Wcast-qual -Wundef -Wwrite-strings \
-	-Wformat -Wformat-security -fstack-protector -fPIE \
-	-Wunreachable-code -Wsign-compare -Wno-endif-labels
+	-Wcast-qual -Wundef -Wwrite-strings  \
+	-Wformat -Wformat-security -fstack-protector -fPIE -D_FORTIFY_SOURCE=2 \
+	-Wunreachable-code -Wsign-compare -Wno-endif-labels \
+	-g -O2
 ifneq ($(EXTRA_CFLAGS),)
 CFLAGS += $(EXTRA_CFLAGS)
 endif
-ifneq ($(EXTRA_LDFLAGS),)
-LDFLAGS += $(EXTRA_LDFLAGS)
-endif
+LDFLAGS=-L$(LIBDIR) -pie -z noexecstack -z relro -z now
+LDLIBS=-lpqos -lpthread
 
 # ICC and GCC options
 ifeq ($(CC),icc)
@@ -67,92 +65,38 @@ CFLAGS += -fno-strict-overflow \
     -fwrapv
 endif
 
-# DEBUG build
-ifeq ($(DEBUG),y)
-CFLAGS += -g -ggdb -O0 -DDEBUG
-else
-CFLAGS += -g -O2 -D_FORTIFY_SOURCE=2
-endif
-
-# RMID CUSTOM
-ifeq ($(RMID_CUSTOM),y)
-CFLAGS += -DPQOS_RMID_CUSTOM
-endif
-
 # Build targets and dependencies
-APP = pqos
-MAN = pqos.8
+ALLOCAPP_L2CAT = allocation_app_l2cat
+ALLOCAPP_L3CAT = allocation_app_l3cat
+ALLOCAPP_MBA = allocation_app_mba
+ASSOCAPP = association_app
+RESETAPP = reset_app
 
-# XXX: modify as desired
-PREFIX ?= /usr/local
-BIN_DIR = $(PREFIX)/bin
-MAN_DIR = $(PREFIX)/man/man8
+all: $(ALLOCAPP_L2CAT) $(ALLOCAPP_L3CAT) $(ALLOCAPP_MBA) $(ASSOCAPP) $(RESETAPP)
 
-SRCS = $(sort $(wildcard *.c))
-OBJS = $(SRCS:.c=.o)
-DEPFILES = $(SRCS:.c=.d)
+$(ALLOCAPP_L2CAT): $(ALLOCAPP_L2CAT).o
+$(ALLOCAPP_L3CAT): $(ALLOCAPP_L3CAT).o
+$(ALLOCAPP_MBA): $(ALLOCAPP_MBA).o
+$(ASSOCAPP): $(ASSOCAPP).o
+$(RESETAPP): $(RESETAPP).o
 
-all: $(APP)
-
-$(APP): $(OBJS)
-	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
-
-%.o: %.c %.d
-
-%.d: %.c
-	$(CC) -MM -MP -MF $@ $(CFLAGS) $<
-	cat $@ | sed 's/$(@:.d=.o)/$@/' >> $@
-
-.PHONY: clean install uninstall
-
-install: $(APP) $(MAN)
-ifeq ($(shell uname), FreeBSD)
-	install -d $(BIN_DIR)
-	install -d $(MAN_DIR)
-	install -s $(APP) $(BIN_DIR)
-	install $(APP)-msr $(BIN_DIR)
-	install -m 0444 $(MAN) $(MAN_DIR)
-	ln -f -s $(MAN) $(MAN_DIR)/$(APP)-msr.8
-else
-	install -D -s $(APP) $(BIN_DIR)/$(APP)
-	install -D $(APP)-msr $(BIN_DIR)/$(APP)-msr
-	install -D $(APP)-os $(BIN_DIR)/$(APP)-os
-	install -m 0444 $(MAN) -D $(MAN_DIR)/$(MAN)
-	ln -f -s $(MAN) $(MAN_DIR)/$(APP)-msr.8
-	ln -f -s $(MAN) $(MAN_DIR)/$(APP)-os.8
-endif
-
-uninstall:
-	-rm $(BIN_DIR)/$(APP)
-	-rm $(MAN_DIR)/$(MAN)
-	-rm $(BIN_DIR)/$(APP)-msr
-	-rm $(MAN_DIR)/$(APP)-msr.8
-ifneq ($(shell uname), FreeBSD)
-	-rm $(BIN_DIR)/$(APP)-os
-	-rm $(MAN_DIR)/$(APP)-os.8
-endif
-
+.PHONY: clean
 clean:
-	-rm -f $(APP) $(OBJS) $(DEPFILES) ./*~
+	-rm -f $(ALLOCAPP_L2CAT) $(ALLOCAPP_L3CAT) $(ALLOCAPP_MBA) $(ASSOCAPP) $(RESETAPP) *.o
 
 CHECKPATCH?=checkpatch.pl
 .PHONY: style
 style:
 	$(CHECKPATCH) --no-tree --no-signoff --emacs \
-	--ignore CODE_INDENT,INITIALISED_STATIC,LEADING_SPACE,SPLIT_STRING,UNSPECIFIED_INT,ARRAY_SIZE,\
-	SPDX_LICENSE_TAG,CONST_STRUCT \
-	 -f main.c -f main.h -f monitor.c -f monitor.h -f alloc.c -f alloc.h -f profiles.c -f profiles.h \
-	 -f cap.h -f cap.c -f common.h -f common.c
+	--ignore CODE_INDENT,INITIALISED_STATIC,LEADING_SPACE,SPLIT_STRING,UNSPECIFIED_INT \
+	--ignore SPDX_LICENSE_TAG,CONST_STRUCT \
+	-f allocation_app_l2cat.c allocation_app_l3cat.c -f allocation_app_mba.c \
+        -f association_app.c -f reset_app.c
 
 CPPCHECK?=cppcheck
 .PHONY: cppcheck
 cppcheck:
 	$(CPPCHECK) --enable=warning,portability,performance,unusedFunction,missingInclude \
 	--std=c99 -I$(LIBDIR) --template=gcc \
-	main.c main.h alloc.c alloc.h monitor.c monitor.h profiles.c profiles.h \
-	cap.h cap.c common.h common.c
-
-# if target not clean then make dependencies
-ifneq ($(MAKECMDGOALS),clean)
--include $(DEPFILES)
-endif
+	allocation_app_l2cat.c allocation_app_l3cat.c allocation_app_mba.c association_app.c \
+        reset_app.c

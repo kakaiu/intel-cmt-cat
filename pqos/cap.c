@@ -44,7 +44,7 @@
 #endif
 #include "pqos.h"
 
-#include "pqos-main.h"
+#include "main.h"
 #include "cap.h"
 
 #define BUFFER_SIZE 256

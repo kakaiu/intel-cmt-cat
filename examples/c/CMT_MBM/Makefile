@@ -35,68 +35,58 @@
 #
 ###############################################################################
 
-# XXX: modify as desired
-PREFIX ?= /usr/local
-export PREFIX
+LIBDIR ?= ../../../lib
+CFLAGS =-I$(LIBDIR) -pthread \
+	-W -Wall -Wextra -Wstrict-prototypes -Wmissing-prototypes \
+	-Wmissing-declarations -Wold-style-definition -Wpointer-arith \
+	-Wcast-qual -Wundef -Wwrite-strings \
+	-Wformat -Wformat-security -fstack-protector -fPIE -D_FORTIFY_SOURCE=2 \
+	-Wunreachable-code -Wsign-compare -Wno-endif-labels \
+	-g -O2
+ifneq ($(EXTRA_CFLAGS),)
+CFLAGS += $(EXTRA_CFLAGS)
+endif
+LDFLAGS=-L$(LIBDIR) -pie -z noexecstack -z relro -z now
+LDLIBS=-lpqos -lpthread
 
-ifdef DEBUG
-export DEBUG
+# ICC and GCC options
+ifeq ($(CC),icc)
+else
+CFLAGS += -Wcast-align \
+    -Wnested-externs \
+    -Wmissing-noreturn
 endif
 
-ifdef SHARED
-export SHARED
+IS_GCC = $(shell $(CC) -v 2>&1 | grep -c "^gcc version ")
+# GCC-only options
+ifeq ($(IS_GCC),1)
+CFLAGS += -fno-strict-overflow \
+    -fno-delete-null-pointer-checks \
+    -fwrapv
 endif
 
-.PHONY: all clean TAGS install uninstall style cppcheck
+# Build targets and dependencies
+MONITORAPP = monitor_app
 
-all:
-	$(MAKE) -C lib
-	$(MAKE) -C pqos
-	$(MAKE) -C rdtset
-	$(MAKE) -C tools/membw
-	$(MAKE) -C examples/c/CAT_MBA
-	$(MAKE) -C examples/c/CMT_MBM
-	$(MAKE) -C examples/c/PSEUDO_LOCK
+all: $(MONITORAPP)
 
+$(MONITORAPP): $(MONITORAPP).o
+
+.PHONY: clean
 clean:
-	$(MAKE) -C lib clean
-	$(MAKE) -C pqos clean
-	$(MAKE) -C rdtset clean
-	$(MAKE) -C tools/membw clean
-	$(MAKE) -C examples/c/CAT_MBA clean
-	$(MAKE) -C examples/c/CMT_MBM clean
-	$(MAKE) -C examples/c/PSEUDO_LOCK clean
-	$(MAKE) -C tests clean
+	-rm -f $(MONITORAPP) ./*.o
 
+CHECKPATCH?=checkpatch.pl
+.PHONY: style
 style:
-	$(MAKE) -C lib style
-	$(MAKE) -C pqos style
-	$(MAKE) -C rdtset style
-	$(MAKE) -C tools/membw style
-	$(MAKE) -C examples/c/CAT_MBA style
-	$(MAKE) -C examples/c/CMT_MBM style
-	$(MAKE) -C examples/c/PSEUDO_LOCK style
-	$(MAKE) -C appqos style
-	$(MAKE) -C tests style
+	$(CHECKPATCH) --no-tree --no-signoff --emacs \
+	--ignore CODE_INDENT,INITIALISED_STATIC,LEADING_SPACE,SPLIT_STRING,UNSPECIFIED_INT \
+	--ignore SPDX_LICENSE_TAG,CONST_STRUCT \
+	-f monitor_app.c
 
+CPPCHECK?=cppcheck
+.PHONY: cppcheck
 cppcheck:
-	$(MAKE) -C lib cppcheck
-	$(MAKE) -C pqos cppcheck
-	$(MAKE) -C rdtset cppcheck
-	$(MAKE) -C tools/membw cppcheck
-	$(MAKE) -C examples/c/CAT_MBA cppcheck
-	$(MAKE) -C examples/c/CMT_MBM cppcheck
-	$(MAKE) -C examples/c/PSEUDO_LOCK cppcheck
-
-install:
-	$(MAKE) -C lib install
-	$(MAKE) -C pqos install
-	$(MAKE) -C rdtset install
-
-uninstall:
-	$(MAKE) -C lib uninstall
-	$(MAKE) -C pqos uninstall
-	$(MAKE) -C rdtset uninstall
-
-TAGS:
-	find ./ -name "*.[ch]" -print | etags -
+	$(CPPCHECK) --enable=warning,portability,performance,unusedFunction,missingInclude \
+	--std=c99 -I$(LIBDIR) --template=gcc \
+	monitor_app.c

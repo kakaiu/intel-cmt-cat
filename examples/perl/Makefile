@@ -1,10 +1,10 @@
 ###############################################################################
-# Makefile script for PQoS sample application
+# Makefile script for PQoS hello_world.pl Perl script
 #
 # @par
 # BSD LICENSE
 #
-# Copyright(c) 2014-2019 Intel Corporation. All rights reserved.
+# Copyright(c) 2016-2019 Intel Corporation. All rights reserved.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,71 +32,38 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
 ###############################################################################
 
-# XXX: modify as desired
-PREFIX ?= /usr/local
-export PREFIX
+PERLTIDY?=perltidy
 
-ifdef DEBUG
-export DEBUG
-endif
+PERLTIDY_STYLE=-bar -ce -pt=2 -sbt=2 -bt=2 -bbt=2 -et=4 -baao -nsfs
+# http://perltidy.sourceforge.net/stylekey.html
+# http://perltidy.sourceforge.net/perltidy.html
+# -bar - keep the brace on the right even for multiple-line test expressions
+# -ce - Cuddled Else
+# -pt=2 - parentheses horizontal tightness - space is never used
+# -sbt=2 - square brackets horizontal tightness - space is never used
+# -bbt=2 - code block curly braces horizontal tightness - space is never used
+# -et=4 - entab leading whitespace with one tab character for each 4 spaces
+# -baao - "break after all operators"
+# -nsfs - no space before a semicolon in a for statement
 
-ifdef SHARED
-export SHARED
-endif
+# List of Perl scripts to be processed, space separated list
+PERL_SCRIPTS_LIST=hello_world.pl
 
-.PHONY: all clean TAGS install uninstall style cppcheck
-
-all:
-	$(MAKE) -C lib
-	$(MAKE) -C pqos
-	$(MAKE) -C rdtset
-	$(MAKE) -C tools/membw
-	$(MAKE) -C examples/c/CAT_MBA
-	$(MAKE) -C examples/c/CMT_MBM
-	$(MAKE) -C examples/c/PSEUDO_LOCK
-
-clean:
-	$(MAKE) -C lib clean
-	$(MAKE) -C pqos clean
-	$(MAKE) -C rdtset clean
-	$(MAKE) -C tools/membw clean
-	$(MAKE) -C examples/c/CAT_MBA clean
-	$(MAKE) -C examples/c/CMT_MBM clean
-	$(MAKE) -C examples/c/PSEUDO_LOCK clean
-	$(MAKE) -C tests clean
-
+# To check if required style is followed, perltidy is called and
+# formatted output is compared to actual file,
+# if there are no differences, it means that file meets the requirements
+.PHONY: style
 style:
-	$(MAKE) -C lib style
-	$(MAKE) -C pqos style
-	$(MAKE) -C rdtset style
-	$(MAKE) -C tools/membw style
-	$(MAKE) -C examples/c/CAT_MBA style
-	$(MAKE) -C examples/c/CMT_MBM style
-	$(MAKE) -C examples/c/PSEUDO_LOCK style
-	$(MAKE) -C appqos style
-	$(MAKE) -C tests style
+	@bash -c 'for i in $(PERL_SCRIPTS_LIST); do \
+		$(PERLTIDY) $(PERLTIDY_STYLE) ./$${i} -st |\
+		diff - ./$${i} && echo "$${i} style OK" ||\
+		{ echo "$${i} style check failed!"; exit 1; }; \
+	done'
 
-cppcheck:
-	$(MAKE) -C lib cppcheck
-	$(MAKE) -C pqos cppcheck
-	$(MAKE) -C rdtset cppcheck
-	$(MAKE) -C tools/membw cppcheck
-	$(MAKE) -C examples/c/CAT_MBA cppcheck
-	$(MAKE) -C examples/c/CMT_MBM cppcheck
-	$(MAKE) -C examples/c/PSEUDO_LOCK cppcheck
-
-install:
-	$(MAKE) -C lib install
-	$(MAKE) -C pqos install
-	$(MAKE) -C rdtset install
-
-uninstall:
-	$(MAKE) -C lib uninstall
-	$(MAKE) -C pqos uninstall
-	$(MAKE) -C rdtset uninstall
-
-TAGS:
-	find ./ -name "*.[ch]" -print | etags -
+.PHONY: style-fix
+style-fix:
+	@bash -c 'for i in $(PERL_SCRIPTS_LIST); do \
+		$(PERLTIDY) $(PERLTIDY_STYLE) -b ./$${i}; \
+	done'
