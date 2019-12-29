@@ -54,18 +54,18 @@ all:
 	$(MAKE) -C pqos
 	$(MAKE) -C rdtset
 	$(MAKE) -C tools/membw
-	$(MAKE) -C examples/c/CAT_MBA
-	$(MAKE) -C examples/c/CMT_MBM
-	$(MAKE) -C examples/c/PSEUDO_LOCK
+	$(MAKE) -C c/CAT_MBA
+	$(MAKE) -C c/CMT_MBM
+	$(MAKE) -C c/PSEUDO_LOCK
 
 clean:
 	$(MAKE) -C lib clean
 	$(MAKE) -C pqos clean
 	$(MAKE) -C rdtset clean
 	$(MAKE) -C tools/membw clean
-	$(MAKE) -C examples/c/CAT_MBA clean
-	$(MAKE) -C examples/c/CMT_MBM clean
-	$(MAKE) -C examples/c/PSEUDO_LOCK clean
+	$(MAKE) -C c/CAT_MBA clean
+	$(MAKE) -C c/CMT_MBM clean
+	$(MAKE) -C c/PSEUDO_LOCK clean
 	$(MAKE) -C tests clean
 
 style:
@@ -73,9 +73,9 @@ style:
 	$(MAKE) -C pqos style
 	$(MAKE) -C rdtset style
 	$(MAKE) -C tools/membw style
-	$(MAKE) -C examples/c/CAT_MBA style
-	$(MAKE) -C examples/c/CMT_MBM style
-	$(MAKE) -C examples/c/PSEUDO_LOCK style
+	$(MAKE) -C c/CAT_MBA style
+	$(MAKE) -C c/CMT_MBM style
+	$(MAKE) -C c/PSEUDO_LOCK style
 	$(MAKE) -C appqos style
 	$(MAKE) -C tests style
 
@@ -84,9 +84,9 @@ cppcheck:
 	$(MAKE) -C pqos cppcheck
 	$(MAKE) -C rdtset cppcheck
 	$(MAKE) -C tools/membw cppcheck
-	$(MAKE) -C examples/c/CAT_MBA cppcheck
-	$(MAKE) -C examples/c/CMT_MBM cppcheck
-	$(MAKE) -C examples/c/PSEUDO_LOCK cppcheck
+	$(MAKE) -C c/CAT_MBA cppcheck
+	$(MAKE) -C c/CMT_MBM cppcheck
+	$(MAKE) -C c/PSEUDO_LOCK cppcheck
 
 install:
 	$(MAKE) -C lib install
