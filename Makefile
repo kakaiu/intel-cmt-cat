@@ -41,9 +41,12 @@ export PREFIX
 
 .PHONY: all clean install uninstall
 
-all:
-	$(MAKE) -C -MM main.c
+all: T2 T3 T1
+T1:
+	gcc main.c pqos -o main
+T2: 
 	$(MAKE) -C lib
+T3:
 	$(MAKE) -C pqos
 
 clean:
