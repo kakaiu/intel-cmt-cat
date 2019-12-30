@@ -66,14 +66,15 @@ CFLAGS += -fno-strict-overflow \
 endif
 
 # Build targets and dependencies
+APP = main
 ALLOCAPP_L2CAT = allocation_app_l2cat
 ALLOCAPP_L3CAT = allocation_app_l3cat
 ALLOCAPP_MBA = allocation_app_mba
 ASSOCAPP = association_app
 RESETAPP = reset_app
 
-all: $(ALLOCAPP_L2CAT) $(ALLOCAPP_L3CAT) $(ALLOCAPP_MBA) $(ASSOCAPP) $(RESETAPP)
-
+all: $(APP) $(ALLOCAPP_L2CAT) $(ALLOCAPP_L3CAT) $(ALLOCAPP_MBA) $(ASSOCAPP) $(RESETAPP)
+$(APP): $(APP).o
 $(ALLOCAPP_L2CAT): $(ALLOCAPP_L2CAT).o
 $(ALLOCAPP_L3CAT): $(ALLOCAPP_L3CAT).o
 $(ALLOCAPP_MBA): $(ALLOCAPP_MBA).o
@@ -82,7 +83,7 @@ $(RESETAPP): $(RESETAPP).o
 
 .PHONY: clean
 clean:
-	-rm -f $(ALLOCAPP_L2CAT) $(ALLOCAPP_L3CAT) $(ALLOCAPP_MBA) $(ASSOCAPP) $(RESETAPP) *.o
+	-rm -f $(APP) $(ALLOCAPP_L2CAT) $(ALLOCAPP_L3CAT) $(ALLOCAPP_MBA) $(ASSOCAPP) $(RESETAPP) *.o
 
 CHECKPATCH?=checkpatch.pl
 .PHONY: style
