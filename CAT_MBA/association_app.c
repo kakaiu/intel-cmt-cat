@@ -47,6 +47,8 @@
 #include <fcntl.h>
 #include "pqos.h"
 
+extern int association_main(int argc, char *argv[]);
+
 /**
  * Defines
  */
@@ -175,7 +177,7 @@ set_allocation_assoc(void)
 	return sel_l3ca_assoc_num;
 }
 
-int main(int argc, char *argv[])
+int association_main(int argc, char *argv[])
 {
 	struct pqos_config cfg;
 	int ret, exit_val = EXIT_SUCCESS;

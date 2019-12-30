@@ -47,6 +47,8 @@
 #include <fcntl.h>
 #include "pqos.h"
 
+extern int mba_main(int argc, char *argv[]);
+
 /**
  * MBA struct type
  */
@@ -203,7 +205,7 @@ print_allocation_config(const struct pqos_cap *p_cap,
 	}
 	return ret;
 }
-int main(int argc, char *argv[])
+int mba_main(int argc, char *argv[])
 {
 	struct pqos_config cfg;
 	const struct pqos_cpuinfo *p_cpu = NULL;

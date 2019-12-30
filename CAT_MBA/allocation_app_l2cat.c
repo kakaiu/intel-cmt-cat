@@ -47,6 +47,8 @@
 #include <fcntl.h>
 #include "pqos.h"
 
+extern int l2_cat_main(int argc, char *argv[]);
+
 /**
  * Maintains number of Class of Services supported for L2 cache allocation
  */
@@ -181,7 +183,7 @@ print_allocation_config(const unsigned l2_count,
 	return ret;
 }
 
-int main(int argc, char *argv[])
+int l2_cat_main(int argc, char *argv[])
 {
 	struct pqos_config cfg;
 	const struct pqos_cpuinfo *p_cpu = NULL;

@@ -47,6 +47,8 @@
 #include <fcntl.h>
 #include "pqos.h"
 
+extern int reset_main(int argc, char *argv[]);
+
 /**
  * @brief Prints information about cache allocation settings in the system
  *
@@ -115,7 +117,7 @@ print_allocation_config(const struct pqos_capability *cap_l3ca,
 	}
 }
 
-int main(int argc, char *argv[])
+int reset_main(int argc, char *argv[])
 {
         struct pqos_config cfg;
         const struct pqos_cpuinfo *p_cpu = NULL;

@@ -47,6 +47,8 @@
 #include <fcntl.h>
 #include "pqos.h"
 
+extern int l3_cat_main(int argc, char *argv[]);
+
 /**
  * Maintains number of Class of Services supported by socket for
  * L3 cache allocation
@@ -182,7 +184,7 @@ print_allocation_config(const unsigned l3cat_id_count,
 	return ret;
 }
 
-int main(int argc, char *argv[])
+int l3_cat_main(int argc, char *argv[])
 {
 	struct pqos_config cfg;
 	const struct pqos_cpuinfo *p_cpu = NULL;
