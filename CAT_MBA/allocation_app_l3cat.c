@@ -47,8 +47,6 @@
 #include <fcntl.h>
 #include "pqos.h"
 
-extern int l3_cat_main(int argc, char *argv[]);
-
 /**
  * Maintains number of Class of Services supported by socket for
  * L3 cache allocation

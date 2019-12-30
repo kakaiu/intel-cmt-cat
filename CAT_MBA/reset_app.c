@@ -47,8 +47,6 @@
 #include <fcntl.h>
 #include "pqos.h"
 
-extern int reset_main(int argc, char *argv[]);
-
 /**
  * @brief Prints information about cache allocation settings in the system
  *
