@@ -47,6 +47,7 @@
 #include <fcntl.h>
 #include "pqos.h"
 
+int association_main(int argc, char *argv[]);
 /**
  * Defines
  */

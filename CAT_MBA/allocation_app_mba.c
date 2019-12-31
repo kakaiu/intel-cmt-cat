@@ -47,6 +47,7 @@
 #include <fcntl.h>
 #include "pqos.h"
 
+int mba_main(int argc, char *argv[]);
 /**
  * MBA struct type
  */
